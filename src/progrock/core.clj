@@ -1,7 +1,7 @@
 (ns progrock.core)
 
 (defn progress-bar [total]
-  {:progress 0, :total total})
+  {:progress 0, :total total, :done? false})
 
 (defn tick
   ([bar]
@@ -10,7 +10,7 @@
    (update-in bar [:progress] + amount)))
 
 (defn done [bar]
-  (assoc bar :progress (:total bar)))
+  (assoc bar :done? true))
 
 (defn as-string
   ([bar]
