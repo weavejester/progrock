@@ -36,7 +36,10 @@
        :progress (str (:progress bar))
        :total    (str (:total bar))}))))
 
-(defn print-progress [bar]
-  (print (str "\r" (as-string bar)))
-  (flush)
-  (when (:done? bar) (println)))
+(defn print-progress
+  ([bar]
+   (print-progress bar {}))
+  ([bar options]
+   (print (str "\r" (as-string bar options)))
+   (flush)
+   (when (:done? bar) (println))))
