@@ -21,6 +21,9 @@
     (str (apply str (repeat completed-length complete))
          (apply str (repeat (- length completed-length) incomplete)))))
 
+(defn- align-right [text size]
+  (str (apply str (repeat (- size (count text)) \space)) text))
+
 (def default-options
   {:length 50
    :format "[:bar] :progress/:total"
@@ -35,7 +38,7 @@
      (keyword-replace
       (:format options)
       {:bar      (bar-text bar options)
-       :progress (str (:progress bar))
+       :progress (align-right (str (:progress bar)) (count (str (:total bar))))
        :total    (str (:total bar))}))))
 
 (defn print-progress
