@@ -23,3 +23,8 @@
           (apply str (repeat complete-length "="))
           (apply str (repeat (- bar-length complete-length) " "))
           "]"))))
+
+(defn print-progress [bar]
+  (print (str "\r" (as-string bar)))
+  (flush)
+  (when (:done? bar) (println)))
