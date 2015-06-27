@@ -1,17 +1,25 @@
 (ns progrock.core
   (:require [clojure.string :as str]))
 
-(defn progress-bar [total]
-  {:progress 0, :total total, :done? false})
+(defn progress-bar
+  ([total]
+   (progress-bar total :default))
+  ([total state]
+   {:progress 0, :total total, :done? false, :state state}))
 
 (defn tick
   ([bar]
    (tick bar 1))
   ([bar amount]
-   (update-in bar [:progress] + amount)))
+   (update-in bar [:progress] + amount))
+  ([bar amount state]
+   (-> bar (tick amount) (assoc :state state))))
 
-(defn done [bar]
-  (assoc bar :done? true))
+(defn done
+  ([bar]
+   (assoc bar :done? true))
+  ([bar state]
+   (-> (done bar) (assoc :state state))))
 
 (defn- keyword-replace [string keywords]
   (reduce-kv #(str/replace %1 (str %2) (str %3)) string keywords))
@@ -33,8 +41,8 @@
 (defn as-string
   ([bar]
    (as-string bar {}))
-  ([bar options]
-   (let [options (merge default-options options)]
+  ([bar profiles]
+   (let [options (merge default-options ((:state bar) profiles))]
      (keyword-replace
       (:format options)
       {:bar      (bar-text bar options)
