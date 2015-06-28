@@ -36,10 +36,13 @@
 (defn- align-right [text size]
   (str (apply str (repeat (- size (count text)) \space)) text))
 
+(defn- percent [x total]
+  (int (* 100 (/ x total))))
+
 (def default-profile
   "A map of default options for a profile used in as-string."
   {:length 50
-   :format "[:bar] :progress/:total"
+   :format ":progress/:total   :percent% [:bar]"
    :complete \=
    :incomplete \space})
 
@@ -60,7 +63,8 @@
       (:format options)
       {:bar      (bar-text bar options)
        :progress (align-right (str (:progress bar)) (count (str (:total bar))))
-       :total    (str (:total bar))}))))
+       :total    (str (:total bar))
+       :percent  (align-right (str (percent (:progress bar) (:total bar))) 3)}))))
 
 (defn print
   "Prints a progress bar, overwriting any existing progress bar on the same
