@@ -8,15 +8,10 @@
   ([bar]
    (tick bar 1))
   ([bar amount]
-   (update-in bar [:progress] + amount))
-  ([bar amount state]
-   (-> bar (tick amount) (assoc :state state))))
+   (update-in bar [:progress] + amount)))
 
-(defn done
-  ([bar]
-   (assoc bar :done? true))
-  ([bar state]
-   (-> (done bar) (assoc :state state))))
+(defn done [bar]
+  (assoc bar :done? true))
 
 (defn- keyword-replace [string keywords]
   (reduce-kv #(str/replace %1 (str %2) (str %3)) string keywords))
