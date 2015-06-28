@@ -1,6 +1,8 @@
 (ns progrock.core
   "A namespace for generating textual progress bars in a functional way."
-  (:require [clojure.string :as str]))
+  (:refer-clojure :exclude [print])
+  (:require [clojure.core :as core]
+            [clojure.string :as str]))
 
 (defn progress-bar
   "Create an immutable data structure representing a progress bar. The ending
@@ -41,7 +43,7 @@
    :complete \=
    :incomplete \space})
 
-(defn as-string
+(defn render
   "Render a progress bar as a string. Takes an optional map of profiles, which
   connects state keywords to maps of display options. The following display
   options are allowed:
@@ -51,7 +53,7 @@
     :complete   - the character to use for a completed chunk
     :incomplete - the character to use for an incomplete chunk"
   ([bar]
-   (as-string bar {}))
+   (render bar {}))
   ([bar profiles]
    (let [options (merge default-profile ((:state bar) profiles))]
      (keyword-replace
@@ -60,12 +62,12 @@
        :progress (align-right (str (:progress bar)) (count (str (:total bar))))
        :total    (str (:total bar))}))))
 
-(defn print-progress
+(defn print
   "Prints a progress bar, overwriting any existing progress bar on the same
   line. If the progress bar is done, a new line is printed."
   ([bar]
-   (print-progress bar {}))
+   (print bar {}))
   ([bar options]
-   (print (str "\r" (as-string bar options)))
+   (core/print (str "\r" (render bar options)))
    (flush)
-   (when (:done? bar) (println))))
+   (when (:done? bar) (newline))))
