@@ -1,11 +1,8 @@
 (ns progrock.core
   (:require [clojure.string :as str]))
 
-(defn progress-bar
-  ([total]
-   (progress-bar total :default))
-  ([total state]
-   {:progress 0, :total total, :done? false, :state state}))
+(defn progress-bar [total state]
+  {:progress 0, :total total, :done? false, :state state})
 
 (defn tick
   ([bar]
