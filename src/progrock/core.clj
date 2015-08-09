@@ -5,15 +5,12 @@
             [clojure.string :as str]))
 
 (defn progress-bar
-  "Create an immutable data structure representing a progress bar. The ending
-  total must be supplied, along with a keyword representing the current state.
-  The state can be anything, but will be used to determine how to display the
-  progress bar."
-  [total state]
+  "Create an immutable data structure representing a progress bar for the
+  specified total."
+  [total]
   {:progress 0
    :total total
    :done? false
-   :state state
    :creation-time (System/currentTimeMillis)})
 
 (defn tick
@@ -58,8 +55,8 @@
     (if (pos? progress)
       (- (/ elapsed (/ progress total)) elapsed))))
 
-(def default-profile
-  "A map of default options for a profile used in as-string."
+(def default-render-options
+  "A map of default options for the render function."
   {:length 50
    :format ":progress/:total   :percent% [:bar]  ETA: :remaining"
    :complete \=
@@ -86,9 +83,8 @@
     :remaining - the estimated remaining time in minutes and seconds"
   ([bar]
    (render bar {}))
-  ([bar profiles]
-   (let [{:keys [state progress total]} bar
-         options (merge default-profile (state profiles))]
+  ([{:keys [state progress total] :as bar} options]
+   (let [options (merge default-render-options options)]
      (keyword-replace
       (:format options)
       {:bar       (bar-text bar options)
