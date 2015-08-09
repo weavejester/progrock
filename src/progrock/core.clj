@@ -44,14 +44,24 @@
   (int (* 100 (/ x total))))
 
 (defn- interval-str [milliseconds]
-  (let [seconds (mod (int (/ milliseconds 1000)) 60)
-        minutes (int (/ milliseconds 60000))]
-    (format "%02d:%02d" minutes seconds)))
+  (if (nil? milliseconds)
+    "--:--"
+    (let [seconds (mod (int (/ milliseconds 1000)) 60)
+          minutes (int (/ milliseconds 60000))]
+      (format "%02d:%02d" minutes seconds))))
+
+(defn- elapsed-time [{:keys [creation-time]}]
+  (- (System/currentTimeMillis) creation-time))
+
+(defn- remaining-time [{:keys [progress total] :as bar}]
+  (let [elapsed (elapsed-time bar)]
+    (if (pos? progress)
+      (- (/ elapsed (/ progress total)) elapsed))))
 
 (def default-profile
   "A map of default options for a profile used in as-string."
   {:length 50
-   :format ":progress/:total   :percent% [:bar]"
+   :format ":progress/:total   :percent% [:bar]  ETA: :remaining"
    :complete \=
    :incomplete \space})
 
@@ -68,23 +78,25 @@
   The format string determines how the bar is displayed, with the following
   subsitutions:
 
-    :bar      - the progress bar itself
-    :progress - the number of complete items
-    :total    - the total number of items
-    :percent  - the percentage done
-    :elapsed  - the elapsed time in minutes and seconds"
+    :bar       - the progress bar itself
+    :progress  - the number of complete items
+    :total     - the total number of items
+    :percent   - the percentage done
+    :elapsed   - the elapsed time in minutes and seconds
+    :remaining - the estimated remaining time in minutes and seconds"
   ([bar]
    (render bar {}))
   ([bar profiles]
-   (let [{:keys [state progress total creation-time]} bar
+   (let [{:keys [state progress total]} bar
          options (merge default-profile (state profiles))]
      (keyword-replace
       (:format options)
-      {:bar      (bar-text bar options)
-       :progress (align-right (str progress) (count (str total)))
-       :total    (str total)
-       :percent  (align-right (str (percent progress total)) 3)
-       :elapsed  (interval-str (- (System/currentTimeMillis) creation-time))}))))
+      {:bar       (bar-text bar options)
+       :progress  (align-right (str progress) (count (str total)))
+       :total     (str total)
+       :percent   (align-right (str (percent progress total)) 3)
+       :elapsed   (interval-str (elapsed-time bar))
+       :remaining (interval-str (remaining-time bar))}))))
 
 (defn print
   "Prints a progress bar, overwriting any existing progress bar on the same
