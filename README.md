@@ -2,11 +2,13 @@
 
 A functional Clojure progress bar for the command line.
 
+
 ## Installation
 
 Add the following dependency to your `project.clj`:
 
     [progrock "0.1.0-SNAPSHOT"]
+
 
 ## Usage
 
@@ -73,6 +75,12 @@ You can also extensively customize the progress bar:
           {:length 20, :format "|:bar| :progress/:total", :complete \#})
 ;; |#####               |  25/100
 ```
+
+
+## Documentation
+
+* [API Docs](https://weavejester.github.io/progrock/progrock.core.html)
+
 
 ## License
 
