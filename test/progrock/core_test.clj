@@ -27,7 +27,9 @@
     (is (= (pr/render (pr/tick bar 25) {:format "(:bar)", :length 10})
            "(=====     )"))
     (is (= (pr/render (pr/tick bar 25) {:format "[:bar]", :complete \#, :incomplete \-})
-           "[#########################-------------------------]"))))
+           "[#########################-------------------------]"))
+    (is (= (pr/render (pr/progress-bar 0))
+           "0/0     0% [                                                  ]  ETA: --:--"))))
 
 (deftest test-print
   (let [bar (pr/progress-bar 50)]

@@ -30,7 +30,8 @@
   (reduce-kv #(str/replace %1 (str %2) (str %3)) string keywords))
 
 (defn- bar-text [{:keys [progress total]} {:keys [length complete incomplete]}]
-  (let [completed-length (int (* (/ progress total) length))]
+  (let [completed-ratio  (if (pos? total) (/ progress total) 0)
+        completed-length (int (* completed-ratio length))]
     (str (apply str (repeat completed-length complete))
          (apply str (repeat (- length completed-length) incomplete)))))
 
@@ -38,7 +39,7 @@
   (str (apply str (repeat (- size (count text)) \space)) text))
 
 (defn- percent [x total]
-  (int (* 100 (/ x total))))
+  (if (pos? total) (int (* 100 (/ x total))) 0))
 
 (defn- interval-str [milliseconds]
   (if (nil? milliseconds)
@@ -52,7 +53,7 @@
 
 (defn- remaining-time [{:keys [progress total] :as bar}]
   (let [elapsed (elapsed-time bar)]
-    (if (pos? progress)
+    (if (and (pos? progress) (pos? total))
       (- (/ elapsed (/ progress total)) elapsed))))
 
 (def default-render-options
