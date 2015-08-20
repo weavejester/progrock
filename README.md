@@ -9,7 +9,7 @@ A functional Clojure progress bar for the command line.
 
 Add the following dependency to your `project.clj`:
 
-    [progrock "0.1.0"]
+    [progrock "0.1.1"]
 
 
 ## Usage
