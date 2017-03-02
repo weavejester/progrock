@@ -102,5 +102,5 @@
    (print bar {}))
   ([bar options]
    (core/print (str "\r" (render bar options)))
-   (flush)
-   (when (:done? bar) (newline))))
+   (when (:done? bar) (newline))
+   (flush)))
