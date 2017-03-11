@@ -1,4 +1,4 @@
-(defproject progrock "0.1.1"
+(defproject progrock "0.1.2"
   :description "A functional progress bar for the command line"
   :url "https://github.com/weavejester/progrock"
   :license {:name "Eclipse Public License"
