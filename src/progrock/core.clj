@@ -38,8 +38,8 @@
 (defn- align-right [text size]
   (str (apply str (repeat (- size (count text)) \space)) text))
 
-(defn- percent [x total]
-  (if (pos? total) (int (* 100 (/ x total))) 0))
+(defn percent [{:keys [progress total]}]
+  (if (pos? total) (int (* 100 (/ progress total))) 0))
 
 (defn- interval-str [milliseconds]
   (if (nil? milliseconds)
@@ -48,10 +48,10 @@
           minutes (int (/ milliseconds 60000))]
       (format "%02d:%02d" minutes seconds))))
 
-(defn- elapsed-time [{:keys [creation-time]}]
+(defn elapsed-time [{:keys [creation-time]}]
   (- (System/currentTimeMillis) creation-time))
 
-(defn- remaining-time [{:keys [progress total] :as bar}]
+(defn remaining-time [{:keys [progress total] :as bar}]
   (let [elapsed (elapsed-time bar)]
     (if (and (pos? progress) (pos? total))
       (- (/ elapsed (/ progress total)) elapsed))))
@@ -84,14 +84,14 @@
     :remaining - the estimated remaining time in minutes and seconds"
   ([bar]
    (render bar {}))
-  ([{:keys [state progress total] :as bar} options]
+  ([{:keys [progress total] :as bar} options]
    (let [options (merge default-render-options options)]
      (keyword-replace
       (:format options)
       {:bar       (bar-text bar options)
        :progress  (align-right (str progress) (count (str total)))
        :total     (str total)
-       :percent   (align-right (str (percent progress total)) 3)
+       :percent   (align-right (str (percent bar)) 3)
        :elapsed   (interval-str (elapsed-time bar))
        :remaining (interval-str (remaining-time bar))}))))
 
