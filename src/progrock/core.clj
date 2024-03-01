@@ -44,9 +44,9 @@
 (defn- interval-str [milliseconds]
   (if (nil? milliseconds)
     "--:--"
-    (let [seconds (mod (int (/ milliseconds 1000)) 60)
-          minutes (int (/ milliseconds 60000))]
-      (format "%02d:%02d" minutes seconds))))
+    (let [seconds (-> milliseconds (/ 1000) bigint (mod 60))
+          minutes (-> milliseconds (/ 60000) bigint)]
+      (str minutes ":" seconds))))
 
 (defn elapsed-time [{:keys [creation-time]}]
   (- (System/currentTimeMillis) creation-time))
