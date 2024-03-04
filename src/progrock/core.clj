@@ -42,12 +42,12 @@
   (if (pos? total) (int (* 100 (/ progress total))) 0))
 
 (defn- interval-str [milliseconds]
-  (if (and (some? milliseconds)
-           (> Integer/MAX_VALUE milliseconds))
+  (if (or (nil? milliseconds)
+           (>= milliseconds Integer/MAX_VALUE))
+    "--:--"
     (let [seconds (-> milliseconds (/ 1000) int (mod 60))
           minutes (-> milliseconds (/ 60000) int)]
-      (format "%02d:%02d" minutes seconds))
-    "--:--"))
+      (format "%02d:%02d" minutes seconds))))
 
 (defn elapsed-time [{:keys [creation-time]}]
   (- (System/currentTimeMillis) creation-time))
