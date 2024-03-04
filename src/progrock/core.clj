@@ -43,7 +43,7 @@
 
 (defn- interval-str [milliseconds]
   (if (or (nil? milliseconds)
-           (>= milliseconds Integer/MAX_VALUE))
+          (>= milliseconds Integer/MAX_VALUE))
     "--:--"
     (let [seconds (-> milliseconds (/ 1000) int (mod 60))
           minutes (-> milliseconds (/ 60000) int)]
