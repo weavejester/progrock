@@ -42,7 +42,8 @@
   (if (pos? total) (int (* 100 (/ progress total))) 0))
 
 (defn- interval-str [milliseconds]
-  (if (nil? milliseconds)
+  (if (or (nil? milliseconds)
+          (>= milliseconds Integer/MAX_VALUE))
     "--:--"
     (let [seconds (mod (int (/ milliseconds 1000)) 60)
           minutes (int (/ milliseconds 60000))]
