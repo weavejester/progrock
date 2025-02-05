@@ -9,7 +9,17 @@ A functional Clojure progress bar for the command line.
 
 Add the following dependency to your `project.clj`:
 
+```clojure
     [progrock "0.1.2"]
+```
+
+or deps.edn:
+
+```clojure
+    progrock/progrock {:git/url "https://github.com/weavejester/progrock.git"
+                       :git/tag "0.1.2"
+                       :git/sha "f53b792c53f631e052dadb7b2794a6b905de7b9e"}
+```
 
 
 ## Usage
