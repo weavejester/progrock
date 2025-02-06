@@ -5,7 +5,11 @@ A functional Clojure progress bar for the command line.
 
 ## Installation
 
-Add the following dependency to your `project.clj`:
+Add the following dependency to your deps.edn file:
+
+    progrock/progrock {:mvn/version "0.1.2"}
+
+Or to your Leiningen project file:
 
     [progrock "0.1.2"]
 
