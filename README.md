@@ -1,6 +1,4 @@
-# Progrock
-
-[![Build Status](https://travis-ci.org/weavejester/progrock.svg)](https://travis-ci.org/weavejester/progrock)
+# Progrock [![Build Status](https://github.com/weavejester/progrock/actions/workflows/test.yml/badge.svg)](https://github.com/weavejester/progrock/actions/workflows/test.yml)
 
 A functional Clojure progress bar for the command line.
 
